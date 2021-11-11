@@ -5,12 +5,14 @@ const settings = {
   dimensions: [1080, 1080],
 };
 
-const sketch = () => {
-  return ({ context, width, height }) => {
-    context.fillStyle = 'white';
-    context.fillRect(0, 0, width, height);
+const { range } = random;
 
-    context.fillStyle = 'black';
+const sketch = () => {
+  return ({ context: ctx, width, height }) => {
+    ctx.fillStyle = 'white';
+    ctx.fillRect(0, 0, width, height);
+
+    ctx.fillStyle = 'black';
 
     const cx = width * 0.5;
     const cy = height * 0.5;
@@ -18,7 +20,7 @@ const sketch = () => {
     const h = height * 0.1;
     let x, y;
 
-    const num = 12;
+    const num = 600;
     const radius = width * 0.3;
 
     for (let i = 0; i < num; i++) {
@@ -28,21 +30,43 @@ const sketch = () => {
       x = cx + radius * Math.sin(angle);
       y = cy + radius * Math.cos(angle);
 
-      context.save();
-      context.fillStyle = `rgba(
-        ${random.range(0, 255)},
-        ${random.range(0, 255)},
-        ${random.range(0, 255)},
-        ${random.range(0.5, 1)}
+      ctx.save();
+      ctx.fillStyle = `rgba(
+        ${range(0, 80)},
+        ${range(0, 20)},
+        ${range(0, 50)},
+        ${range(0.8, 1)}
       )`;
-      context.translate(x, y);
-      context.rotate(-angle);
-      context.scale(random.range(1, 3), 1);
+      ctx.translate(x, y);
+      ctx.rotate(-angle);
+      ctx.scale(range(0.1, 2), 1);
 
-      context.beginPath();
-      context.rect(-w * 0.5, -h * 0.5, w, h);
-      context.fill();
-      context.restore();
+      ctx.beginPath();
+      ctx.rect(
+        -w * 0.5,
+        range(0, -h * 0.5),
+        w * range(0.1, 1.5),
+        h * range(0.5, 1.8)
+      );
+      ctx.fill();
+      ctx.restore();
+
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(-angle);
+
+      ctx.lineWidth = range(2, 15);
+
+      ctx.beginPath();
+      ctx.arc(
+        0,
+        0,
+        radius * range(0.5, 1.5),
+        slice * range(0, -5),
+        slice * range(0, 3)
+      );
+      ctx.stroke();
+      ctx.restore();
     }
   };
 };
