@@ -8,12 +8,12 @@ class Vector {
 }
 
 export class Agent {
-  constructor({ x, y, radius } = { x: 0, y: 0, radius: 0 }) {
+  constructor({ x = 0, y = 0, radius = 1 }) {
     this.position = new Vector(x, y);
-    this.radius = random.range(1, 20);
+    this.radius = radius;
     this.velocity = new Vector(
-      Math.sqrt(random.range(0.001, 0.003) * this.radius) * random.sign(),
-      Math.sqrt(random.range(0.001, 0.003) * this.radius) * random.sign()
+      Math.sqrt(random.range(10, 100) / 1000 * this.radius) * random.sign(),
+      Math.sqrt(random.range(10, 100) / 1000 * this.radius) * random.sign()
     );
   }
 
@@ -32,7 +32,7 @@ export class Agent {
     ctx.save();
     ctx.translate(this.position.x, this.position.y);
 
-    ctx.lineWidth = 4;
+    ctx.lineWidth = 3;
 
     ctx.beginPath();
     ctx.arc(0, 0, Math.abs(this.radius), 0, Math.PI * 2);

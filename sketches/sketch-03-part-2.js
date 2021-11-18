@@ -9,14 +9,14 @@ const settings = {
   dimensions: [1080, 1080],
 };
 
-const AGENTS_AMOUNT = 20;
+const AGENTS_AMOUNT = 3;
 
 const sketch = ({ context: ctx, width: w, height: h }) => {
   const agents = [];
   for (let i = 0; i < AGENTS_AMOUNT; i++) {
     const x = range(w * 0.05, w * 0.95);
     const y = range(h * 0.05, h * 0.95);
-    const radius = range(4, 8);
+    const radius = range(4, 22);
     agents.push(new Agent({ x, y, radius }));
   }
 
@@ -31,8 +31,8 @@ const sketch = ({ context: ctx, width: w, height: h }) => {
         const b = agents[j];
 
         ctx.beginPath();
-        ctx.moveTo(a.position.x, b.position.y);
-        ctx.lineTo(a.position.y, b.position.x);
+        ctx.moveTo(a.position.x, a.position.y);
+        ctx.lineTo(b.position.y, b.position.x);
         ctx.stroke();
       }
     }
