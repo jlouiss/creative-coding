@@ -11,12 +11,8 @@ const BACKGROUND_COLOR = random.pick(randomColorScheme);
 const COLORS = randomColorScheme.filter(c => c !== BACKGROUND_COLOR);
 
 const sketch = ({ context: ctx, width: w, height: h }) => {
-  console.log(ctx);
   const canvas = ctx.canvas;
-  canvas.style.height = '25%';
-  canvas.style.width = '25%';
-  canvas.style.transform = 'scale(4)';
-  canvas.style.filter = 'blur(1.5px)';
+  canvas.style.filter = 'blur(4px)';
   document.querySelector('body').style.background = BACKGROUND_COLOR;
 
   const agents = [];
