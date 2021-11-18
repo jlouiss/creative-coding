@@ -21,6 +21,20 @@ const sketch = ({ context: ctx, width: w, height: h }) => {
   return () => {
     ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, w, h);
+
+    for (let i = 0; i < agents.length; i++) {
+      const a = agents[i];
+
+      for (let j = 0; j < agents.length; j++) {
+        const b = agents[j];
+
+        ctx.beginPath();
+        ctx.moveTo(a.position.x, b.position.y);
+        ctx.lineTo(b.position.x, b.position.y);
+        ctx.stroke();
+      }
+    }
+
     agents.forEach((agent) => {
       agent.update();
       agent.draw(ctx);
