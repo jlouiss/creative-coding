@@ -3,7 +3,7 @@ import { canvasSketch } from 'canvas-sketch';
 import { random } from 'canvas-sketch-util';
 import { randomColorScheme } from './color-schemes';
 
-const AGENTS_AMOUNT = 250;
+const AGENTS_AMOUNT = 200;
 const settings = {
   animate: true,
 };
@@ -11,11 +11,19 @@ const BACKGROUND_COLOR = random.pick(randomColorScheme);
 const COLORS = randomColorScheme.filter(c => c !== BACKGROUND_COLOR);
 
 const sketch = ({ context: ctx, width: w, height: h }) => {
+  console.log(ctx);
+  const canvas = ctx.canvas;
+  canvas.style.height = '25%';
+  canvas.style.width = '25%';
+  canvas.style.transform = 'scale(4)';
+  canvas.style.filter = 'blur(1.5px)';
+  document.querySelector('body').style.background = BACKGROUND_COLOR;
+
   const agents = [];
   for (let i = 0; i < AGENTS_AMOUNT; i++) {
-    const x = random.range(w * 0.1, w * 0.9);
-    const y = random.range(h * 0.1, h * 0.9);
-    const radius = random.range(10, random.range(0.6, 1.2) * random.range(1, 100));
+    const x = random.range(w * 0.05, w * 0.95);
+    const y = random.range(h * 0.05, h * 0.95);
+    const radius = random.range(1, 10) * random.range(.01, 100);
     agents.push(new Agent({ x, y, radius, color: random.pick(COLORS) }));
   }
 

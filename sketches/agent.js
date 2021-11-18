@@ -8,25 +8,27 @@ class Vector {
 }
 
 export class Agent {
-  constructor(
-    { x, y, color } = { x: 0, y: 0, radius: 0, color: '#000' }
-  ) {
+  constructor({ x, y, color } = { x: 0, y: 0, radius: 0, color: '#000' }) {
     this.color = color;
     this.position = new Vector(x, y);
 
     this.initialRadius = random.range(1, 20);
     this.radius = this.initialRadius;
     this.radiusMovement = random.sign();
-    this.radiusVelocity = random.range(.01, .1);
+    this.radiusVelocity = random.range(0.01, 0.1);
     this.velocity = new Vector(
-      Math.sqrt(random.range(0, this.initialRadius)) * random.sign(),
-      Math.sqrt(random.range(0, this.initialRadius)) * random.sign(),
+      Math.sqrt(
+        random.range(0.001, 0.003) * this.initialRadius
+      ) * random.sign(),
+      Math.sqrt(
+        random.range(0.001, 0.003) * this.initialRadius
+      ) * random.sign()
     );
 
-    this.initialLineWidth = random.range(.5, 2) * this.initialRadius;
+    this.initialLineWidth = random.range(0.5, 2) * this.initialRadius;
     this.lineWidth = this.initialLineWidth;
     this.lineWidthMovement = random.sign();
-    this.lineWidthVelocity = random.range(.01, .5);
+    this.lineWidthVelocity = random.range(0.001, 0.005);
   }
 
   bounce(width, height) {
@@ -46,7 +48,7 @@ export class Agent {
     if (this.radius <= 2 || this.radius > this.initialRadius) {
       this.radiusMovement *= -1;
     }
-    if (this.lineWidth <= .5 || this.lineWidth > this.initialLineWidth) {
+    if (this.lineWidth <= 0.5 || this.lineWidth > this.initialLineWidth) {
       this.lineWidthMovement *= -1;
     }
   }
