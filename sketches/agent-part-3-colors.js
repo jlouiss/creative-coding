@@ -15,10 +15,11 @@ class Vector {
 }
 
 export class Agent {
-  constructor({ x = 0, y = 0, radius = 1, color = 'black' }) {
+  constructor({ x = 0, y = 0, radius = 1, color = 'black', strokeColor = 'black' }) {
     this.position = new Vector(x, y);
     this.radius = radius;
     this.color = color;
+    this.strokeColor = strokeColor;
     this.velocity = new Vector(
       Math.sqrt(random.range(1, 10) / 1000 * this.radius) * random.sign(),
       Math.sqrt(random.range(1, 10) / 1000 * this.radius) * random.sign()
