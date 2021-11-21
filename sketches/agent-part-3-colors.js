@@ -32,6 +32,19 @@ export class Agent {
       this.velocity.y *= -1;
   }
 
+  wrap(width, height) {
+    if (this.position.x <= 0) {
+      this.position.x = width;
+    } else if (this.position.x > width) {
+      this.position.x = 0;
+    }
+    if (this.position.y <= 0) {
+      this.position.y = height;
+    } else if (this.position.y > height) {
+      this.position.y = 0;
+    }
+  }
+
   update() {
     this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;
