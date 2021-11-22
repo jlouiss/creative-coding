@@ -114,5 +114,5 @@ const createPane = () => {
   noise.addInput(PARAMS, 'frame', { min: 0, max: 1000, step: 1 });
 };
 
-createPane();
+// createPane();
 canvasSketch(sketch, settings);
