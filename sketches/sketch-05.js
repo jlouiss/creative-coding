@@ -1,5 +1,16 @@
 const canvasSketch = require('canvas-sketch');
 
+const settings = {
+  dimensions: [1080, 1080],
+};
+
+let manager;
+
+async function start() {
+  loadFont();
+  manager = await canvasSketch(sketch, settings);
+}
+
 function loadFont() {
   const head = document.querySelector('head');
   const font = document.createElement('link');
@@ -10,11 +21,6 @@ function loadFont() {
   font.setAttribute('rel', 'stylesheet');
   head.appendChild(font);
 }
-
-const settings = {
-  dimensions: [1080, 1080],
-  animate: true,
-};
 
 let text = 'A';
 let fontSize = 1200;
@@ -46,15 +52,14 @@ const sketch = () => {
 
     ctx.save();
     ctx.translate(x, y);
-
-    // ctx.beginPath();
-    // ctx.rect(mx, my, mw, mh);
-    // ctx.stroke();
-
     ctx.fillText(text, 0, 0);
     ctx.restore();
   };
 };
 
-loadFont();
-canvasSketch(sketch, settings);
+document.addEventListener('keyup', event => {
+  text = event.key;
+  manager.render();
+});
+
+start();
