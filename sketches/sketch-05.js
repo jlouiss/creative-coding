@@ -1,8 +1,11 @@
 const canvasSketch = require('canvas-sketch');
+const { random } = require('canvas-sketch-util');
 
 const settings = {
   dimensions: [1080, 1080],
 };
+
+const GLYPHS = '_;/#$&^*@!%'.split('');
 
 let manager;
 
@@ -22,6 +25,15 @@ function loadFont() {
   head.appendChild(font);
 }
 
+function getGlyph(v) {
+  if (v < 50) return '';
+  if (v < 100) return '.';
+  if (v < 150) return '-';
+  if (v < 200) return '+';
+
+  return random.pick(GLYPHS);
+}
+
 let text = 'A';
 let fontFamily = 'Playfair Display';
 const cellSize = 20;
@@ -33,7 +45,7 @@ const sketch = ({ context: ctx, width, height }) => {
   const cols = Math.floor(width / cellSize);
   const rows = Math.floor(height / cellSize);
   const cells = cols * rows;
-  const fontSize = cols;
+  const fontSize = cols * 1.2;
 
   typeCanvas.width = cols;
   typeCanvas.height = rows;
@@ -67,8 +79,13 @@ const sketch = ({ context: ctx, width, height }) => {
     typeCtx.restore();
 
     const typeData = typeCtx.getImageData(0, 0, cols, rows).data;
-    console.dir(typeData);
     ctx.drawImage(typeCanvas, 0, 0);
+
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, width, height);
+
+    ctx.textBaseline = 'middle';
+    ctx.textAlign = 'center';
 
     for (let i = 0; i < cells; i++) {
       const col = i % cols;
@@ -81,23 +98,26 @@ const sketch = ({ context: ctx, width, height }) => {
       const b = typeData[i * 4 + 2];
       // const a = typeData[i * 4 + 3];
 
-      ctx.fillStyle = `rgb(${r},${g},${b})`;
+      const glyph = getGlyph(r);
+
+      ctx.fillStyle = 'white';
+      if (random.chance())
+        ctx.font = `${cellSize * random.range(0.7, 3)}px ${fontFamily}`;
+      else ctx.font = `${cellSize * 1.5}px ${fontFamily}`;
 
       ctx.save();
 
       ctx.translate(x, y);
-      ctx.translate(cellSize * .5, cellSize * .5);
-      // ctx.fillRect(0, 0, cellSize, cellSize);
-      ctx.beginPath();
-      ctx.arc(0, 0, cellSize / 2, 0, Math.PI * 2);
-      ctx.fill();
+      ctx.translate(cellSize * 0.5, cellSize * 0.5);
+
+      ctx.fillText(glyph, 0, 0);
 
       ctx.restore();
     }
   };
 };
 
-document.addEventListener('keyup', event => {
+document.addEventListener('keyup', (event) => {
   text = event.key.toUpperCase();
   manager.render();
 });
