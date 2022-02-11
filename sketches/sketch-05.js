@@ -33,6 +33,14 @@ function getGlyph(v) {
   return random.pick(GLYPHS);
 }
 
+function importImage(ctx, imageUrl, ...params) {
+  const image = new Image();
+  image.src = imageUrl;
+  image.onload = () => {
+    ctx.drawImage(image, ...params)
+  }
+}
+
 let text = 'A';
 let fontFamily = 'Playfair Display';
 const cellSize = 20;
