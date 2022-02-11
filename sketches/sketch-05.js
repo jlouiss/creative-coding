@@ -1,5 +1,5 @@
 const canvasSketch = require('canvas-sketch');
-const { random } = require('canvas-sketch-util');
+const { random, math } = require('canvas-sketch-util');
 
 const settings = {
   dimensions: [1080, 1080],
@@ -7,8 +7,15 @@ const settings = {
 
 const imageUrl = 'https://avatars.githubusercontent.com/u/15015608?v=4';
 const GLYPHS = '_;/#$&^*@!%'.split('');
+const ASCII_GLYPHS =
+  '$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,"^`\' '
+    .split('')
+    .reverse();
 
 let manager;
+let image;
+let fontLoaded = false;
+let imageLoaded = false;
 
 async function start() {
   const head = document.querySelector('head');
@@ -18,32 +25,38 @@ async function start() {
     'https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap'
   );
   font.setAttribute('rel', 'stylesheet');
-  font.addEventListener('load', async () => {
-    manager = await canvasSketch(sketch, settings)
-  });
+  image = new Image();
+  image.src = imageUrl;
+  image.crossOrigin = 'anonymous';
+
+  font.onload = () => {
+    fontLoaded = true;
+    loadCanvas();
+  };
+  image.onload = () => {
+    imageLoaded = true;
+    loadCanvas();
+  };
+
   head.appendChild(font);
 }
 
-function getGlyph(v) {
-  if (v < 50) return '';
-  if (v < 100) return '.';
-  if (v < 150) return '-';
-  if (v < 200) return '+';
-
-  return random.pick(GLYPHS);
-}
-
-function importImage(ctx, imageUrl, ...params) {
-  const image = new Image();
-  image.src = imageUrl;
-  image.onload = () => {
-    ctx.drawImage(image, ...params)
+async function loadCanvas() {
+  if (fontLoaded && imageLoaded) {
+    manager = await canvasSketch(sketch, settings);
   }
 }
 
+function getGlyph(v) {
+  const index = Math.floor(
+    math.mapRange(v, 1, 255, 0, ASCII_GLYPHS.length - 1, true)
+  );
+  return ASCII_GLYPHS[index];
+}
+
 let text = 'A';
-let fontFamily = 'Playfair Display';
-const cellSize = 20;
+let fontFamily = 'monospace';
+const cellSize = 6;
 
 const typeCanvas = document.createElement('canvas');
 const typeCtx = typeCanvas.getContext('2d');
@@ -59,34 +72,9 @@ const sketch = ({ context: ctx, width, height }) => {
 
   return ({ context: ctx, width, height }) => {
     typeCtx.fillStyle = 'black';
-    typeCtx.fillRect(0, 0, cols, rows);
-
-    typeCtx.fillStyle = 'white';
-    typeCtx.font = `${fontSize}px '${fontFamily}'`;
-    typeCtx.textBaseline = 'top';
-
-    const metrics = typeCtx.measureText(text);
-    const {
-      actualBoundingBoxAscent: top,
-      actualBoundingBoxDescent: bottom,
-      actualBoundingBoxLeft: left,
-      actualBoundingBoxRight: right,
-    } = metrics;
-    const mx = left * -1;
-    const my = top * -1;
-    const mw = left + right;
-    const mh = top + bottom;
-
-    const tx = (cols - mw) * 0.5 - mx;
-    const ty = (rows - mh) * 0.5 - my;
-
-    typeCtx.save();
-    typeCtx.translate(tx, ty);
-    typeCtx.fillText(text, 0, 0);
-    typeCtx.restore();
+    typeCtx.drawImage(image, 0, 0, cols, rows);
 
     const typeData = typeCtx.getImageData(0, 0, cols, rows).data;
-    ctx.drawImage(typeCanvas, 0, 0);
 
     ctx.fillStyle = 'black';
     ctx.fillRect(0, 0, width, height);
@@ -108,9 +96,7 @@ const sketch = ({ context: ctx, width, height }) => {
       const glyph = getGlyph(r);
 
       ctx.fillStyle = 'white';
-      if (random.chance())
-        ctx.font = `${cellSize * random.range(0.7, 3)}px ${fontFamily}`;
-      else ctx.font = `${cellSize * 1.5}px ${fontFamily}`;
+      ctx.font = `${cellSize}px ${fontFamily}`;
 
       ctx.save();
 
