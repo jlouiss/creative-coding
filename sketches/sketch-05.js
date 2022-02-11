@@ -5,16 +5,12 @@ const settings = {
   dimensions: [1080, 1080],
 };
 
+const imageUrl = 'https://avatars.githubusercontent.com/u/15015608?v=4';
 const GLYPHS = '_;/#$&^*@!%'.split('');
 
 let manager;
 
 async function start() {
-  loadFont();
-  manager = await canvasSketch(sketch, settings);
-}
-
-function loadFont() {
   const head = document.querySelector('head');
   const font = document.createElement('link');
   font.setAttribute(
@@ -22,6 +18,9 @@ function loadFont() {
     'https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap'
   );
   font.setAttribute('rel', 'stylesheet');
+  font.addEventListener('load', async () => {
+    manager = await canvasSketch(sketch, settings)
+  });
   head.appendChild(font);
 }
 
