@@ -113,7 +113,7 @@ const sketch = () => {
 
 const setupAudio = () => {
   audio = document.createElement('audio');
-  audio.src = 'audio/01.mp3';
+  audio.src = 'audio/02.mp3';
 
   audioCtx = new AudioContext();
 
