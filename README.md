@@ -17,3 +17,11 @@ Happy accidents
 [creative-experiments/cool-01](https://creative-experiments.netlify.app/cool-01)
 
 [creative-experiments/what](https://creative-experiments.netlify.app/what)
+
+
+## Commands
+* create: `canvas-sketch --new <sketch-name> [--open] [--stream]`
+  * `--open` to open in the default browser
+  * `--stream` to make it streamable (cmd + shift + s to save video (toggle start/stop))
+* build: `canvas-sketch --build --inline <sketch-name> --dir dist/`
+  * (for netlify I rename the output to index.html, can be improved)
