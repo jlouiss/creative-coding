@@ -142,26 +142,6 @@ const sketch = ({ height, width }) => {
   };
 };
 
-function shuffle(array) {
-  let currentIndex = array.length,
-    randomIndex;
-
-  // While there remain elements to shuffle.
-  while (currentIndex != 0) {
-    // Pick a remaining element.
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex--;
-
-    // And swap it with the current element.
-    [array[currentIndex], array[randomIndex]] = [
-      array[randomIndex],
-      array[currentIndex],
-    ];
-  }
-
-  return array;
-}
-
 const setupAudio = () => {
   audio = document.createElement('audio');
   audio.src = 'audio/02.mp3';
@@ -180,37 +160,25 @@ const setupAudio = () => {
   maxDb = analyserNode.maxDecibels;
 
   audioData = new Float32Array(analyserNode.frequencyBinCount);
+};
 
-  // console.group('setup audio');
-  // console.group('context');
-  // console.log(audioCtx);
-  // console.groupEnd();
-  // console.group('source node');
-  // console.log(sourceNode);
-  // console.groupEnd();
-  // console.group('analyser node');
-  // console.log(analyserNode);
-  // console.groupEnd();
-  // console.group('audio data');
-  // console.log(audioData);
-  // console.groupEnd();
-  // console.groupEnd();
+const onMouseUp = () => {
+  if (!audioCtx) {
+    setupAudio();
+  }
+
+  if (audio.paused) {
+    audio.play();
+    manager.play();
+  } else {
+    audio.pause();
+    manager.pause();
+  }
 };
 
 const addListeners = () => {
-  window.addEventListener('mouseup', () => {
-    if (!audioCtx) {
-      setupAudio();
-    }
-
-    if (audio.paused) {
-      audio.play();
-      manager.play();
-    } else {
-      audio.pause();
-      manager.pause();
-    }
-  });
+  window.addEventListener('mouseup', onMouseUp);
+  window.addEventListener('touchstart', onMouseUp);
 };
 
 const start = async () => {
