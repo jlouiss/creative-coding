@@ -19,12 +19,11 @@ export class AudioPlayer {
     this.minDb = this.analyserNode.minDecibels;
     this.maxDb = this.analyserNode.maxDecibels;
     this.audioData = new Float32Array(this.analyserNode.frequencyBinCount);
-    this.analyserNode.getFloatFrequencyData(this.audioData);
   }
 
   createAudioElement() {
     this.audioElement = document.createElement('audio');
-    this.audioElement.src = 'audio/02.mp3';
+    this.audioElement.src = this.filename;
   }
 
   setupSourceNode() {
@@ -38,6 +37,10 @@ export class AudioPlayer {
     this.analyserNode.smoothingTimeConstant =
       this.settings.smoothingTimeConstant;
     this.sourceNode.connect(this.analyserNode);
+  }
+
+  getFloatFrequencyData() {
+    this.analyserNode.getFloatFrequencyData(this.audioData);
   }
 
   play() {
