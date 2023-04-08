@@ -1,8 +1,8 @@
 const canvasSketch = require('canvas-sketch');
 const math = require('canvas-sketch-util/math');
 const random = require('canvas-sketch-util/random');
-const { Rhombus } = require('./audio-grid/rhombus');
 const eases = require('eases');
+const { Rhombus } = require('../classes/rhombus');
 
 const seed = random.getRandomSeed();
 const settings = {
