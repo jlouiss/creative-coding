@@ -23,7 +23,7 @@ const parameters = {
   rows: 15,
   gridHeightScale: 0.8,
   gridWidthScale: 0.9,
-  easingFunction: eases.quadOut,
+  easingFunction: eases.quadIn,
 };
 
 let manager;
@@ -41,8 +41,6 @@ const sketch = ({ height, width }) => {
   const ch = gh / rows;
   const mx = (width - gw) / 2;
   const my = (height - gh) / 2;
-  const frequency = random.range(0.0009, 0.0022);
-  const amplitude = random.range(2, 10);
   const rhombuses = [];
   let bins = [];
 
@@ -53,17 +51,17 @@ const sketch = ({ height, width }) => {
   for (let i = 0; i < rows * cols; i++) {
     if (i % 2 === 0 && i % cols !== 0 && (i - 1) % cols !== 0) {
       let x = math.mapRange(
-        -easingFunction(i % cols) * cw,
-        -easingFunction(cols) * cw,
-        0,
-        -cw,
-        gw - cw * 0.9,
+        -easingFunction(i % cols),
+        -easingFunction(cols - 1),
+        -easingFunction(2),
+        cw,
+        gw - cw / 2,
         true
       );
       let xScale = math.mapRange(
-        -easingFunction(i % cols) * cw,
-        -easingFunction(cols) * cw,
-        0,
+        -easingFunction(i % cols),
+        -easingFunction(cols - 1),
+        -easingFunction(2),
         5,
         0.5,
         true
