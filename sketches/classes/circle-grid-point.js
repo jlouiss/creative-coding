@@ -12,7 +12,7 @@ export class CircleGridPoint {
     size = 8,
     dampening = random.range(0.8, 0.95),
     minDist = random.range(360, 460),
-    pullForce = random.range(0.002, 0.5),
+    pullForce = random.range(0.002, 0.2),
     pushForce = random.range(0.001, 0.7),
   }) {
     // acceleration
